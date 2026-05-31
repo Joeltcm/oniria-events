@@ -1,0 +1,15 @@
+{
+  "name": "oniria-events",
+  "version": "1.0.0",
+  "description": "Oniria Events by Marisol Olmos - Sitio web oficial",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

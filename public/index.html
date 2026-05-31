@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Oniria Events by Marisol Olmos - Especialistas en planificación y diseño de eventos únicos. Bodas, quinceaños y eventos corporativos.">
+    <title>Oniria Events by Marisol Olmos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --accent: #C9A96E;
+            --accent-dark: #9E7C42;
+            --text: #222222;
+            --text-light: #666666;
+            --bg: #ffffff;
+            --bg-alt: #f7f7f7;
+            --border: #e8e8e8;
+            --dark: #1a1a1a;
+            --font-h: 'Playfair Display', Georgia, serif;
+            --font-b: 'Inter', -apple-system, sans-serif;
+            --nav-h: 80px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-b);
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 6%;
+            transition: box-shadow .3s;
+        }
+        nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,.08); }
+
+        .logo { text-decoration: none; color: var(--text); display: flex; flex-direction: column; }
+        .logo-main { font-family: var(--font-h); font-size: 1.4rem; font-weight: 700; letter-spacing: .02em; line-height: 1.1; }
+        .logo-sub  { font-size: .62rem; font-weight: 400; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+
+        .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--text);
+            font-size: .8rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+            position: relative; transition: color .2s;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 1px; background: var(--accent); transition: width .3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-cta { background: var(--text) !important; color: #fff !important; padding: .55rem 1.4rem; }
+        .nav-cta::after { display: none !important; }
+        .nav-cta:hover { background: var(--accent) !important; }
+
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: all .3s; }
+
+        .mob-menu {
+            display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
+            background: #fff; border-bottom: 1px solid var(--border);
+            z-index: 999; padding: 1.5rem 6%; flex-direction: column; gap: .75rem;
+        }
+        .mob-menu.open { display: flex; }
+        .mob-menu a {
+            text-decoration: none; color: var(--text);
+            font-size: .85rem; font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
+            padding: .5rem 0; border-bottom: 1px solid var(--border);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            height: 100vh; min-height: 600px;
+            position: relative; display: flex; align-items: center; justify-content: center;
+            text-align: center; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80') center/cover no-repeat;
+            transform: scale(1.06);
+        }
+        .hero-ov {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.3) 55%, rgba(0,0,0,.62));
+        }
+        .hero-body {
+            position: relative; z-index: 1; color: #fff;
+            max-width: 820px; padding: 0 2rem;
+        }
+        .eyebrow {
+            font-size: .68rem; letter-spacing: .3em; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 1.4rem; font-weight: 500;
+        }
+        .hero-body h1 {
+            font-family: var(--font-h);
+            font-size: clamp(2.4rem, 6vw, 5rem);
+            font-weight: 700; line-height: 1.15; margin-bottom: 1.4rem;
+            text-shadow: 0 2px 20px rgba(0,0,0,.3);
+        }
+        .hero-body h1 em { font-style: italic; color: var(--accent); }
+        .hero-sub {
+            font-size: clamp(.95rem, 1.8vw, 1.15rem); font-weight: 300;
+            opacity: .9; margin-bottom: 2.4rem; max-width: 520px; margin-left: auto; margin-right: auto;
+        }
+        .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+        .btn {
+            display: inline-block; padding: .9rem 2.4rem;
+            font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+            text-decoration: none; cursor: pointer; border: none; transition: all .3s; font-family: var(--font-b);
+        }
+        .btn-gold { background: var(--accent); color: #fff; }
+        .btn-gold:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(201,169,110,.4); }
+        .btn-wire { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.7); }
+        .btn-wire:hover { background: #fff; color: var(--text); }
+        .btn-dark { background: var(--text); color: #fff; }
+        .btn-dark:hover { background: var(--accent); }
+
+        .scroll-hint {
+            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            z-index: 1; color: #fff; font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+            display: flex; flex-direction: column; align-items: center; gap: .4rem;
+            opacity: .65; animation: bob 2.2s ease-in-out infinite;
+        }
+        @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+        /* ── SECTIONS ── */
+        section { padding: 5.5rem 6%; }
+
+        .lbl { font-size: .65rem; letter-spacing: .32em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: .7rem; }
+        .h2  { font-family: var(--font-h); font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight: 600; line-height: 1.2; margin-bottom: 1.4rem; }
+        .h2 em { font-style: italic; color: var(--accent); }
+        .desc { color: var(--text-light); font-size: .97rem; line-height: 1.85; max-width: 600px; }
+        .bar { display: block; width: 48px; height: 2px; background: var(--accent); margin: 1.4rem 0; }
+        .bar.c { margin-left: auto; margin-right: auto; }
+        .sec-hd { margin-bottom: 3.5rem; }
+        .sec-hd.center { text-align: center; }
+        .sec-hd.center .desc { margin-left: auto; margin-right: auto; }
+
+        /* ── ABOUT ── */
+        .about-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .about-img { position: relative; }
+        .about-img img { width: 100%; height: 520px; object-fit: cover; display: block; }
+        .about-badge {
+            position: absolute; bottom: 2rem; left: -2rem;
+            background: #fff; padding: 1.5rem 2rem; box-shadow: 0 12px 40px rgba(0,0,0,.12);
+            text-align: center;
+        }
+        .about-badge strong { display: block; font-family: var(--font-h); font-size: 2.2rem; color: var(--accent); line-height: 1; }
+        .about-badge span { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-light); }
+        .about-accent { position: absolute; bottom: -2rem; right: -2rem; width: 180px; height: 180px; background: var(--accent); opacity: .12; z-index: -1; }
+
+        /* ── SERVICES ── */
+        .grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+
+        .srv-card { background: #fff; padding: 2.5rem; transition: transform .3s, box-shadow .3s; }
+        .srv-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,.08); }
+        .srv-icon { width: 56px; height: 56px; margin-bottom: 1.5rem; }
+        .srv-card h3 { font-family: var(--font-h); font-size: 1.25rem; font-weight: 600; margin-bottom: .9rem; }
+        .srv-card p { color: var(--text-light); font-size: .92rem; line-height: 1.75; }
+
+        /* ── CATEGORIES ── */
+        .cat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.4rem; max-width: 1200px; margin: 0 auto; }
+        .cat-card { position: relative; overflow: hidden; height: 420px; display: block; text-decoration: none; }
+        .cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .55s ease; }
+        .cat-card:hover img { transform: scale(1.06); }
+        .cat-ov {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.05) 55%);
+            display: flex; align-items: flex-end; padding: 2rem;
+        }
+        .cat-lbl { font-size: .62rem; letter-spacing: .26em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
+        .cat-ov h3 { font-family: var(--font-h); font-size: 1.9rem; font-weight: 600; color: #fff; line-height: 1; }
+
+        /* ── PORTFOLIO ── */
+        .port-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.4rem; max-width: 1200px; margin: 0 auto; }
+        .port-item { background: #fff; overflow: hidden; }
+        .port-item .img-wrap { overflow: hidden; }
+        .port-item img { width: 100%; height: 270px; object-fit: cover; display: block; transition: transform .5s ease; }
+        .port-item:hover img { transform: scale(1.06); }
+        .port-body { padding: 1.5rem; }
+        .port-tag { font-size: .65rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: .45rem; }
+        .port-body h3 { font-family: var(--font-h); font-size: 1.05rem; font-weight: 600; line-height: 1.35; margin-bottom: .7rem; }
+        .port-body p { color: var(--text-light); font-size: .85rem; line-height: 1.6; }
+
+        /* ── TESTIMONIALS ── */
+        .test-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .test-card { background: var(--bg-alt); padding: 2.5rem; position: relative; }
+        .test-card::before {
+            content: '\201C'; font-family: var(--font-h); font-size: 5rem;
+            color: var(--accent); opacity: .25; position: absolute; top: -.6rem; left: 1.4rem; line-height: 1;
+        }
+        .stars { display: flex; gap: 3px; margin-bottom: 1rem; color: var(--accent); font-size: 1rem; }
+        .test-txt { color: var(--text-light); font-size: .92rem; line-height: 1.82; margin-bottom: 1.5rem; font-style: italic; }
+        .test-author { display: flex; align-items: center; gap: .9rem; }
+        .test-author img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; }
+        .author-name { font-weight: 600; font-size: .88rem; }
+        .author-role { font-size: .75rem; color: var(--text-light); letter-spacing: .04em; }
+
+        /* ── BLOG ── */
+        .blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .blog-card { background: #fff; overflow: hidden; transition: box-shadow .3s; }
+        .blog-card:hover { box-shadow: 0 15px 40px rgba(0,0,0,.08); }
+        .blog-card .img-wrap { overflow: hidden; }
+        .blog-card img { width: 100%; height: 220px; object-fit: cover; display: block; transition: transform .4s ease; }
+        .blog-card:hover img { transform: scale(1.04); }
+        .blog-body { padding: 1.5rem; }
+        .blog-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: .7rem; }
+        .blog-cat { font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+        .blog-date { font-size: .73rem; color: var(--text-light); }
+        .blog-body h3 { font-family: var(--font-h); font-size: 1.05rem; font-weight: 600; line-height: 1.4; margin-bottom: .7rem; }
+        .blog-body p { color: var(--text-light); font-size: .85rem; line-height: 1.65; margin-bottom: 1rem; }
+        .read-more {
+            font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+            color: var(--text); text-decoration: none; border-bottom: 1px solid var(--accent);
+            padding-bottom: 1px; transition: color .2s;
+        }
+        .read-more:hover { color: var(--accent); }
+
+        /* ── CONTACT ── */
+        .contact-wrap { display: grid; grid-template-columns: 1fr 1.5fr; gap: 5rem; max-width: 1200px; margin: 0 auto; align-items: start; }
+        .c-info h3 { font-family: var(--font-h); font-size: 1.45rem; margin-bottom: .9rem; }
+        .c-info > p { color: var(--text-light); line-height: 1.8; margin-bottom: 2rem; font-size: .95rem; }
+        .c-items { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+        .c-item { display: flex; align-items: flex-start; gap: 1rem; }
+        .c-ico { width: 40px; height: 40px; background: var(--bg-alt); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .c-lbl { font-size: .67rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-light); margin-bottom: .2rem; }
+        .c-val { font-size: .9rem; font-weight: 500; }
+        .social-row { display: flex; gap: .6rem; }
+        .soc-btn {
+            width: 40px; height: 40px; background: var(--text); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; transition: background .2s;
+        }
+        .soc-btn:hover { background: var(--accent); }
+
+        .c-form { background: var(--bg-alt); padding: 2.5rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .fg { display: flex; flex-direction: column; gap: .45rem; }
+        .fg.full { grid-column: 1/-1; }
+        .fg label { font-size: .68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-light); }
+        .fg input, .fg textarea, .fg select {
+            padding: .85rem 1rem; border: 1px solid var(--border);
+            font-family: var(--font-b); font-size: 16px; color: var(--text);
+            background: #fff; outline: none; transition: border-color .2s; width: 100%;
+            appearance: none; -webkit-appearance: none;
+        }
+        .fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--accent); }
+        .fg textarea { resize: vertical; min-height: 130px; }
+        .form-note { font-size: .76rem; color: var(--text-light); margin: .5rem 0 1.4rem; }
+        .form-note a { color: var(--accent); }
+        #form-success { display:none; text-align:center; padding: 2.5rem; margin-top: 1rem; }
+        #form-success p:first-child { font-family: var(--font-h); font-size: 1.25rem; margin-bottom: .5rem; }
+        #form-success p:last-child { color: var(--text-light); font-size: .9rem; }
+
+        /* ── FOOTER ── */
+        footer { background: var(--dark); color: rgba(255,255,255,.65); padding: 4rem 6% 2rem; }
+        .ft-top {
+            display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 3rem;
+            margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+        .ft-brand .logo-main { color: #fff; }
+        .ft-brand p { margin-top: 1rem; font-size: .85rem; line-height: 1.75; max-width: 270px; }
+        .ft-soc { display: flex; gap: .5rem; margin-top: 1.5rem; }
+        .ft-soc a {
+            width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.2);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,.55); text-decoration: none; font-size: .82rem;
+            transition: all .2s;
+        }
+        .ft-soc a:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .ft-col h4 { color: #fff; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; margin-bottom: 1.2rem; }
+        .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+        .ft-col a { color: rgba(255,255,255,.55); text-decoration: none; font-size: .85rem; transition: color .2s; }
+        .ft-col a:hover { color: var(--accent); }
+        .ft-bot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .ft-bot p { font-size: .78rem; }
+
+        /* ── FADE IN ── */
+        .fi { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+        .fi.vis { opacity: 1; transform: translateY(0); }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:1024px){
+            .grid3,.cat-grid,.port-grid,.test-grid,.blog-grid { grid-template-columns: repeat(2,1fr); }
+            .ft-top { grid-template-columns: 1fr 1fr; }
+            .about-wrap { grid-template-columns: 1fr; gap: 3rem; }
+            .about-img { order: -1; }
+            .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+        }
+        @media(max-width:768px){
+            :root{ --nav-h: 68px; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            section { padding: 3.5rem 5%; }
+            .grid3,.cat-grid,.port-grid,.test-grid,.blog-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .ft-top { grid-template-columns: 1fr; gap: 2rem; }
+            .ft-bot { flex-direction: column; text-align: center; }
+            .cat-card { height: 300px; }
+            .about-badge { left: 0; bottom: 1rem; }
+            .about-img img { height: 360px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+    <a href="#inicio" class="logo">
+        <span class="logo-main">Oniria Events</span>
+        <span class="logo-sub">by Marisol Olmos</span>
+    </a>
+    <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#portafolio">Portafolio</a></li>
+        <li><a href="#testimonios">Testimonios</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="hamburger" id="ham" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="mob-menu" id="mob">
+    <a href="#inicio"      onclick="closeMob()">Inicio</a>
+    <a href="#servicios"   onclick="closeMob()">Servicios</a>
+    <a href="#portafolio"  onclick="closeMob()">Portafolio</a>
+    <a href="#testimonios" onclick="closeMob()">Testimonios</a>
+    <a href="#blog"        onclick="closeMob()">Blog</a>
+    <a href="#sobre"       onclick="closeMob()">Sobre</a>
+    <a href="#contacto"    onclick="closeMob()">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section id="inicio" class="hero" style="padding:0;">
+    <div class="hero-bg" id="hbg"></div>
+    <div class="hero-ov"></div>
+    <div class="hero-body">
+        <p class="eyebrow">Oniria Events &mdash; Marisol Olmos</p>
+        <h1>Recuerdos <em>inolvidables</em>,<br>momentos excepcionales</h1>
+        <p class="hero-sub">Especialistas en planificación y diseño de eventos únicos que reflejan tu estilo y superan tus expectativas.</p>
+        <div class="hero-btns">
+            <a href="#contacto" class="btn btn-gold">Solicitar Consulta</a>
+            <a href="#portafolio" class="btn btn-wire">Ver Portafolio</a>
+        </div>
+    </div>
+    <div class="scroll-hint">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Descubrir
+    </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre" style="padding-top:6rem;padding-bottom:6rem;">
+    <div class="about-wrap">
+        <div class="about-img">
+            <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=900&q=80" alt="Equipo Oniria Events" loading="lazy">
+            <div class="about-badge">
+                <strong>+200</strong>
+                <span>Eventos realizados</span>
+            </div>
+            <div class="about-accent"></div>
+        </div>
+        <div>
+            <p class="lbl">Sobre Nosotros</p>
+            <h2 class="h2">Creamos experiencias que <em>trascienden</em> lo ordinario</h2>
+            <span class="bar"></span>
+            <p class="desc" style="margin-bottom:1.4rem;">Somos una empresa de planificación y diseño de eventos. Bajo la dirección de Marisol Olmos, combinamos creatividad, precisión y pasión para convertir cada celebración en un recuerdo imborrable.</p>
+            <p class="desc" style="margin-bottom:2rem;">Desde bodas íntimas hasta eventos corporativos de gran escala, nuestro enfoque personalizado garantiza que cada detalle refleje tu visión única.</p>
+            <a href="#contacto" class="btn btn-gold">Conoce Más</a>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios" style="background:var(--bg-alt);padding:6rem 6%;">
+    <div class="sec-hd center">
+        <p class="lbl">Lo Que Hacemos</p>
+        <h2 class="h2">Nuestros <em>Servicios</em></h2>
+        <span class="bar c"></span>
+        <p class="desc">Ofrecemos una gama completa de servicios para que tu evento sea exactamente como lo imaginaste, con creatividad y ejecución impecable.</p>
+    </div>
+    <div class="grid3">
+        <div class="srv-card fi">
+            <!-- Planificación icon -->
+            <svg class="srv-icon" viewBox="0 0 56 56" fill="none">
+                <rect width="56" height="56" fill="#FDF6EC"/>
+                <rect x="14" y="14" width="28" height="28" rx="1" stroke="#C9A96E" stroke-width="1.5"/>
+                <path d="M14 21h28" stroke="#C9A96E" stroke-width="1.5" stroke-dasharray="3 2"/>
+                <path d="M21 29l4 4 8-8" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h3>Planificación Integral</h3>
+            <p>Nos encargamos de todos los detalles para que su evento sea único y perfectamente organizado, desde la concepción hasta la ejecución final.</p>
+        </div>
+        <div class="srv-card fi">
+            <!-- Coordinación icon -->
+            <svg class="srv-icon" viewBox="0 0 56 56" fill="none">
+                <rect width="56" height="56" fill="#FDF6EC"/>
+                <circle cx="28" cy="26" r="9" stroke="#C9A96E" stroke-width="1.5"/>
+                <path d="M22 40c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M28 17v-3M28 38v3M17 26h-3M42 26h-3" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <h3>Coordinación Impecable</h3>
+            <p>Garantizamos una ejecución fluida y sin contratiempos para que disfrute cada momento de su celebración sin preocupaciones.</p>
+        </div>
+        <div class="srv-card fi">
+            <!-- Diseño icon -->
+            <svg class="srv-icon" viewBox="0 0 56 56" fill="none">
+                <rect width="56" height="56" fill="#FDF6EC"/>
+                <path d="M16 40 Q21 20 28 26 Q34 32 40 14" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="28" cy="28" r="3" fill="#C9A96E"/>
+                <path d="M14 40h28" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <h3>Diseño Temático</h3>
+            <p>Creamos ambientes personalizados que reflejan su estilo y visión, transformando ideas en espacios únicos e inolvidables.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORÍAS -->
+<section style="padding:6rem 6%;">
+    <div class="sec-hd center">
+        <p class="lbl">Especialidades</p>
+        <h2 class="h2">Cada Celebración, <em>única</em></h2>
+        <span class="bar c"></span>
+    </div>
+    <div class="cat-grid">
+        <a href="#contacto" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=900&q=80" alt="Bodas" loading="lazy">
+            <div class="cat-ov">
+                <div>
+                    <p class="cat-lbl">Celebración</p>
+                    <h3>Bodas</h3>
+                </div>
+            </div>
+        </a>
+        <a href="#contacto" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=900&q=80" alt="Quinceaños" loading="lazy">
+            <div class="cat-ov">
+                <div>
+                    <p class="cat-lbl">Celebración</p>
+                    <h3>Quinceaños</h3>
+                </div>
+            </div>
+        </a>
+        <a href="#contacto" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=900&q=80" alt="Eventos" loading="lazy">
+            <div class="cat-ov">
+                <div>
+                    <p class="cat-lbl">Corporativo</p>
+                    <h3>Eventos</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- PORTAFOLIO -->
+<section id="portafolio" style="background:var(--bg-alt);padding:6rem 6%;">
+    <div class="sec-hd center">
+        <p class="lbl">Nuestros Trabajos</p>
+        <h2 class="h2">Portafolio de <em>Experiencias</em></h2>
+        <span class="bar c"></span>
+        <p class="desc">Cada proyecto es una historia única que contamos con pasión y dedicación.</p>
+    </div>
+    <div class="port-grid">
+        <div class="port-item fi">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Boda íntima" loading="lazy"></div>
+            <div class="port-body">
+                <p class="port-tag">Boda</p>
+                <h3>Cómo un evento personalizado transformó una celebración en un recuerdo imborrable</h3>
+                <p>Un elegante enlace que combinó tradición y modernidad en una velada de ensueño.</p>
+            </div>
+        </div>
+        <div class="port-item fi">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=800&q=80" alt="Quinceaños" loading="lazy"></div>
+            <div class="port-body">
+                <p class="port-tag">Quinceaños</p>
+                <h3>Logrando momentos memorables gracias a la planificación detallada y la pasión</h3>
+                <p>Una celebración única que superó todas las expectativas de la familia.</p>
+            </div>
+        </div>
+        <div class="port-item fi">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&q=80" alt="Evento Corporativo" loading="lazy"></div>
+            <div class="port-body">
+                <p class="port-tag">Corporativo</p>
+                <h3>Revolucionando celebraciones con ideas innovadoras y atención personalizada</h3>
+                <p>Un evento corporativo que fortaleció lazos y dejó una impresión duradera.</p>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem;">
+        <a href="#contacto" class="btn btn-gold">Ver más proyectos</a>
+    </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios" style="padding:6rem 6%;">
+    <div class="sec-hd center">
+        <p class="lbl">Lo Que Dicen</p>
+        <h2 class="h2">Testimonios de <em>Clientes</em></h2>
+        <span class="bar c"></span>
+    </div>
+    <div class="test-grid">
+        <div class="test-card fi">
+            <div class="stars">★★★★★</div>
+            <p class="test-txt">"Oniria Events superó todas nuestras expectativas. Cada detalle de nuestra boda fue perfecto, desde la decoración hasta la coordinación del día. Marisol y su equipo son verdaderos profesionales."</p>
+            <div class="test-author">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="María López" loading="lazy">
+                <div>
+                    <p class="author-name">María López</p>
+                    <p class="author-role">Novia · Boda 2025</p>
+                </div>
+            </div>
+        </div>
+        <div class="test-card fi">
+            <div class="stars">★★★★★</div>
+            <p class="test-txt">"El quinceaños de mi hija fue un sueño hecho realidad. La atención al detalle, la creatividad en la decoración y la profesionalidad del equipo hicieron de ese día algo verdaderamente especial."</p>
+            <div class="test-author">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Carlos Méndez" loading="lazy">
+                <div>
+                    <p class="author-name">Carlos Méndez</p>
+                    <p class="author-role">Padre de quinceañera · 2025</p>
+                </div>
+            </div>
+        </div>
+        <div class="test-card fi">
+            <div class="stars">★★★★★</div>
+            <p class="test-txt">"Contratamos a Oniria Events para nuestro evento corporativo y los resultados fueron excepcionales. La organización impecable impresionó a todos nuestros socios e invitados."</p>
+            <div class="test-author">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Isabel García" loading="lazy">
+                <div>
+                    <p class="author-name">Isabel García</p>
+                    <p class="author-role">Directora de RRHH · Evento 2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog" style="background:var(--bg-alt);padding:6rem 6%;">
+    <div class="sec-hd center">
+        <p class="lbl">Inspiración</p>
+        <h2 class="h2">Últimas del <em>Blog</em></h2>
+        <span class="bar c"></span>
+    </div>
+    <div class="blog-grid">
+        <div class="blog-card fi">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1478146059778-26028b07395a?w=800&q=80" alt="Tendencias en eventos" loading="lazy"></div>
+            <div class="blog-body">
+                <div class="blog-meta"><span class="blog-cat">Tendencias</span><span class="blog-date">15 Mar 2026</span></div>
+                <h3>Las 10 tendencias en decoración de eventos que dominarán este año</h3>
+                <p>Descubre los estilos y paletas de color que están marcando pauta en los eventos más exclusivos.</p>
+                <a href="#blog" class="read-more">Leer más →</a>
+            </div>
+        </div>
+        <div class="blog-card fi">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80" alt="Planificación de boda" loading="lazy"></div>
+            <div class="blog-body">
+                <div class="blog-meta"><span class="blog-cat">Bodas</span><span class="blog-date">28 Feb 2026</span></div>
+                <h3>Guía completa para planificar tu boda sin estrés: pasos clave</h3>
+                <p>Todo lo que necesitas saber para organizar el día más especial de tu vida con tranquilidad.</p>
+                <a href="#blog" class="read-more">Leer más →</a>
+            </div>
+        </div>
+        <div class="blog-card fi">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=80" alt="Quinceaños temáticos" loading="lazy"></div>
+            <div class="blog-body">
+                <div class="blog-meta"><span class="blog-cat">Quinceaños</span><span class="blog-date">10 Ene 2026</span></div>
+                <h3>Ideas innovadoras para quinceaños temáticos que sorprenderán a todos</h3>
+                <p>Inspírate con estas propuestas únicas para crear una celebración completamente personalizada.</p>
+                <a href="#blog" class="read-more">Leer más →</a>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem;">
+        <a href="#blog" class="btn btn-gold">Ver más artículos</a>
+    </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" style="padding:6rem 6%;">
+    <div class="contact-wrap">
+        <div class="c-info">
+            <p class="lbl">Hablemos</p>
+            <h2 class="h2">Hagamos Realidad tu <em>Evento</em></h2>
+            <span class="bar"></span>
+            <p>Cuéntanos sobre tu evento y te ayudaremos a crear una experiencia única e inolvidable. Estamos aquí para hacer tus sueños realidad.</p>
+            <div class="c-items">
+                <div class="c-item">
+                    <div class="c-ico">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 11a3 3 0 100-6 3 3 0 000 6z" stroke="#C9A96E" stroke-width="1.5"/>
+                            <path d="M17 10c0 5-7 9-7 9s-7-4-7-9a7 7 0 1114 0z" stroke="#C9A96E" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="c-lbl">Dirección</p>
+                        <p class="c-val">Av. Principal 123, 28001 Madrid</p>
+                    </div>
+                </div>
+                <div class="c-item">
+                    <div class="c-ico">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M3 5a2 2 0 012-2h2l1.5 3.5-1.5 1a11 11 0 005 5l1-1.5L16 12.5V14.5a2 2 0 01-2 2A13 13 0 013 5z" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="c-lbl">Teléfono</p>
+                        <p class="c-val">+34 912 34 56 78</p>
+                    </div>
+                </div>
+                <div class="c-item">
+                    <div class="c-ico">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <rect x="2" y="4" width="16" height="13" rx="1" stroke="#C9A96E" stroke-width="1.5"/>
+                            <path d="M2 7l8 5 8-5" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="c-lbl">Email</p>
+                        <p class="c-val">contacto@oniriaevents.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="social-row">
+                <a href="#" class="soc-btn" aria-label="Facebook">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                </a>
+                <a href="#" class="soc-btn" aria-label="Instagram">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="#" class="soc-btn" aria-label="Twitter / X">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="c-form">
+            <form id="cform" onsubmit="submitForm(event)">
+                <div class="form-row">
+                    <div class="fg">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
+                    </div>
+                    <div class="fg">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="fg">
+                        <label for="tel">Teléfono</label>
+                        <input type="tel" id="tel" name="tel" placeholder="+34 000 000 000">
+                    </div>
+                    <div class="fg">
+                        <label for="tipo">Tipo de Evento</label>
+                        <select id="tipo" name="tipo">
+                            <option value="">Selecciona...</option>
+                            <option>Boda</option>
+                            <option>Quinceaños</option>
+                            <option>Evento Corporativo</option>
+                            <option>Cumpleaños</option>
+                            <option>Otro</option>
+                        </select>
+                    </div>
+                    <div class="fg full">
+                        <label for="asunto">Asunto</label>
+                        <input type="text" id="asunto" name="asunto" placeholder="¿En qué podemos ayudarte?">
+                    </div>
+                    <div class="fg full">
+                        <label for="msg">Mensaje</label>
+                        <textarea id="msg" name="msg" placeholder="Cuéntanos sobre tu evento: fecha, número de invitados, visión..." required></textarea>
+                    </div>
+                </div>
+                <p class="form-note">Al enviar aceptas nuestra <a href="#">política de privacidad</a>.</p>
+                <button type="submit" class="btn btn-dark" id="sbtn" style="width:100%;">Enviar Mensaje</button>
+            </form>
+            <div id="form-success">
+                <p>¡Mensaje enviado!</p>
+                <p>Nos pondremos en contacto contigo muy pronto.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="ft-top">
+        <div class="ft-brand">
+            <a href="#inicio" class="logo">
+                <span class="logo-main">Oniria Events</span>
+                <span class="logo-sub">by Marisol Olmos</span>
+            </a>
+            <p>Especialistas en planificación y diseño de eventos únicos. Convertimos tus sueños en experiencias excepcionales que perduran en la memoria.</p>
+            <div class="ft-soc">
+                <a href="#" aria-label="Facebook">f</a>
+                <a href="#" aria-label="Instagram">ig</a>
+                <a href="#" aria-label="Twitter">x</a>
+            </div>
+        </div>
+        <div class="ft-col">
+            <h4>Navegación</h4>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#portafolio">Portafolio</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+        </div>
+        <div class="ft-col">
+            <h4>Especialidades</h4>
+            <ul>
+                <li><a href="#contacto">Bodas</a></li>
+                <li><a href="#contacto">Quinceaños</a></li>
+                <li><a href="#contacto">Eventos Corporativos</a></li>
+                <li><a href="#contacto">Cumpleaños</a></li>
+                <li><a href="#contacto">Eventos Sociales</a></li>
+            </ul>
+        </div>
+        <div class="ft-col">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="#">Aviso Legal</a></li>
+                <li><a href="#">Política de Privacidad</a></li>
+                <li><a href="#">Política de Cookies</a></li>
+                <li><a href="#">Términos y Condiciones</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="ft-bot">
+        <p>© 2026 Oniria Events by Marisol Olmos. Todos los derechos reservados.</p>
+        <p style="font-size:.72rem;opacity:.4;">Madrid, España</p>
+    </div>
+</footer>
+
+<script>
+    // Nav scroll shadow
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50), { passive: true });
+
+    // Parallax hero bg
+    const hbg = document.getElementById('hbg');
+    window.addEventListener('scroll', () => {
+        hbg.style.transform = `scale(1.06) translateY(${scrollY * 0.28}px)`;
+    }, { passive: true });
+
+    // Mobile menu
+    const ham = document.getElementById('ham');
+    const mob = document.getElementById('mob');
+    ham.addEventListener('click', () => mob.classList.toggle('open'));
+    function closeMob() { mob.classList.remove('open'); }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const id = a.getAttribute('href');
+            if (id === '#') return;
+            const el = document.querySelector(id);
+            if (!el) return;
+            e.preventDefault();
+            const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 80;
+            window.scrollTo({ top: el.getBoundingClientRect().top + scrollY - offset, behavior: 'smooth' });
+            closeMob();
+        });
+    });
+
+    // Fade-in observer
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fi').forEach(el => io.observe(el));
+
+    // Form submit
+    function submitForm(e) {
+        e.preventDefault();
+        const btn = document.getElementById('sbtn');
+        btn.textContent = 'Enviando...';
+        btn.disabled = true;
+        setTimeout(() => {
+            document.getElementById('cform').style.display = 'none';
+            document.getElementById('form-success').style.display = 'block';
+        }, 1000);
+    }
+</script>
+</body>
+</html>

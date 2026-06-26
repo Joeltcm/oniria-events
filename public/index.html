@@ -367,37 +367,51 @@
             to   { opacity:1; transform:translateY(0); }
         }
 
-        /* ── GALLERY ── */
-        .gal-grid {
-            display: grid;
-            grid-template-columns: repeat(4,1fr);
-            gap: .6rem;
-            max-width: 1200px; margin: 0 auto;
+        /* ── CAROUSEL ── */
+        .car-wrap { position: relative; max-width: 1200px; margin: 0 auto; }
+        .car-outer { overflow: hidden; position: relative; }
+        .car-track {
+            display: flex; gap: 8px;
+            transition: transform .5s cubic-bezier(.25,.46,.45,.94);
+            will-change: transform;
         }
-        .gal-item {
-            position: relative; overflow: hidden; cursor: pointer;
-            aspect-ratio: 1; background: var(--border);
+        .car-item {
+            flex: 0 0 auto; aspect-ratio: 1;
+            overflow: hidden; position: relative; cursor: pointer; background: #2a2a2a;
         }
-        .gal-item.wide { grid-column: span 2; aspect-ratio: 2/1; }
-        .gal-item img {
-            width: 100%; height: 100%; object-fit: cover; display: block;
-            transition: transform .55s ease;
+        .car-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .55s ease; }
+        .car-item:hover img { transform: scale(1.08); }
+        .car-ov {
+            position: absolute; inset: 0; background: rgba(0,0,0,0);
+            display: flex; align-items: center; justify-content: center; transition: background .3s;
         }
-        .gal-item:hover img { transform: scale(1.08); }
-        .gal-ov {
-            position: absolute; inset: 0;
-            background: rgba(0,0,0,0);
-            display: flex; align-items: center; justify-content: center;
-            transition: background .3s;
-        }
-        .gal-item:hover .gal-ov { background: rgba(0,0,0,.38); }
-        .gal-ov-icon {
+        .car-item:hover .car-ov { background: rgba(0,0,0,.38); }
+        .car-ov-icon {
             opacity: 0; transform: scale(.6);
             transition: opacity .3s, transform .3s;
             color: #fff; display: flex; flex-direction: column; align-items: center; gap: .4rem;
         }
-        .gal-item:hover .gal-ov-icon { opacity: 1; transform: scale(1); }
-        .gal-ov-icon span { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
+        .car-item:hover .car-ov-icon { opacity: 1; transform: scale(1); }
+        .car-ov-icon span { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
+
+        .car-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            z-index: 10; background: rgba(10,10,10,.65); border: none;
+            color: rgba(255,255,255,.85); width: 44px; height: 68px;
+            cursor: pointer; transition: background .2s, color .2s;
+            display: flex; align-items: center; justify-content: center; font-size: 2.5rem; line-height: 1;
+        }
+        .car-btn:hover { background: var(--accent); color: #fff; }
+        .car-btn:disabled { opacity: .22; pointer-events: none; }
+        .car-prev { left: 0; }
+        .car-next { right: 0; }
+        .car-footer {
+            display: flex; align-items: center; justify-content: center;
+            gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap;
+        }
+        .car-progress { width: 160px; height: 2px; background: rgba(255,255,255,.12); position: relative; overflow: hidden; }
+        .car-progress-bar { position: absolute; top: 0; left: 0; height: 100%; background: var(--accent); transition: width .4s ease; width: 0; }
+        .car-counter { color: rgba(255,255,255,.38); font-size: .72rem; letter-spacing: .12em; }
 
         /* ── LIGHTBOX ── */
         .lb-wrap {
@@ -447,7 +461,6 @@
         /* — Tablet ancho (1024px) — */
         @media(max-width:1024px){
             .grid3,.cat-grid,.port-grid,.test-grid,.blog-grid { grid-template-columns: repeat(2,1fr); }
-            .gal-grid { grid-template-columns: repeat(3,1fr); }
             .ft-top { grid-template-columns: 1fr 1fr; }
             .about-wrap { grid-template-columns: 1fr; gap: 3rem; }
             .about-img { order: -1; }
@@ -500,8 +513,8 @@
             .blog-card img { height: 200px; }
             .blog-body { padding: 1.2rem; }
 
-            /* Galería */
-            .gal-grid { grid-template-columns: repeat(2,1fr); gap: .35rem; }
+            /* Carrusel */
+            .car-btn { width: 36px; height: 52px; font-size: 2.2rem; }
 
             /* Lightbox */
             #lbImg       { max-width: 96vw; max-height: 70vh; }
@@ -547,9 +560,8 @@
             .about-name     { padding: .7rem 1rem; }
             .about-name strong { font-size: .88rem; }
 
-            /* Galería: 1 columna en móviles muy pequeños */
-            .gal-grid { grid-template-columns: 1fr; }
-            .gal-item.wide { aspect-ratio: 4/3; }
+            /* Carrusel móvil pequeño */
+            .car-btn { width: 30px; height: 44px; font-size: 1.9rem; }
 
             /* Botones */
             .btn { padding: .8rem 1.8rem; font-size: .72rem; }
@@ -790,82 +802,15 @@
         <span class="bar c"></span>
         <p class="desc" style="color:rgba(255,255,255,.55);">Cada imagen cuenta una historia única de amor, celebración y atención al detalle.</p>
     </div>
-    <div class="gal-grid" id="galGrid">
-        <div class="gal-item fi" data-caption="Boda Marian &amp; Biel · Panamá">
-            <img src="/images/gallery/g01.jpg" alt="Boda Marian &amp; Biel · Panamá" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+    <div class="car-wrap" id="carWrap">
+        <div class="car-outer" id="carOuter">
+            <div class="car-track" id="carTrack"></div>
+            <button class="car-btn car-prev" id="carPrev" aria-label="Anterior" disabled>&#8249;</button>
+            <button class="car-btn car-next" id="carNext" aria-label="Siguiente">&#8250;</button>
         </div>
-        <div class="gal-item fi" data-caption="Ceremonia · Pasillo floral">
-            <img src="/images/gallery/g02.jpg" alt="Ceremonia · Pasillo floral" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Marisol Olmos con los novios">
-            <img src="/images/gallery/g03.jpg" alt="Marisol Olmos con los novios" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Decoración de mesas con orquídeas">
-            <img src="/images/gallery/g04.jpg" alt="Decoración de mesas con orquídeas" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-
-        <div class="gal-item wide fi" data-caption="Salón elegante · Boda en Panamá">
-            <img src="/images/gallery/g05.jpg" alt="Salón elegante · Boda en Panamá" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Detalle de mesa · Decoración personalizada">
-            <img src="/images/gallery/g06.jpg" alt="Detalle de mesa · Decoración personalizada" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Diseño temático · Árbol decorativo">
-            <img src="/images/gallery/g07.jpg" alt="Diseño temático · Árbol decorativo" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-
-        <div class="gal-item fi" data-caption="Torta de bodas · Diseño exclusivo">
-            <img src="/images/gallery/g08.jpg" alt="Torta de bodas · Diseño exclusivo" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Mesa de charcutería con arco floral">
-            <img src="/images/gallery/g09.jpg" alt="Mesa de charcutería con arco floral" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Mesa principal con follaje y flores blancas">
-            <img src="/images/gallery/g10.jpg" alt="Mesa principal con follaje y flores blancas" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Detalles · Bienvenida personalizada">
-            <img src="/images/gallery/g11.jpg" alt="Detalles · Bienvenida personalizada" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-
-        <div class="gal-item wide fi" data-caption="Centro floral con orquídeas · Mesa boda">
-            <img src="/images/gallery/g12.jpg" alt="Centro floral con orquídeas · Mesa boda" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Arco floral · Mesa de postres">
-            <img src="/images/gallery/g13.jpg" alt="Arco floral · Mesa de postres" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Mesa de postres · Gypsophila y dulces">
-            <img src="/images/gallery/g14.jpg" alt="Mesa de postres · Gypsophila y dulces" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-
-        <div class="gal-item fi" data-caption="Catering · Buffet con arreglos florales">
-            <img src="/images/gallery/g15.jpg" alt="Catering · Buffet con arreglos florales" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Mesa de recuerdos · Vista a la bahía">
-            <img src="/images/gallery/g16.jpg" alt="Mesa de recuerdos · Vista a la bahía" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Torta con muro de follaje · Diseño floral">
-            <img src="/images/gallery/g17.jpg" alt="Torta con muro de follaje · Diseño floral" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
-        </div>
-        <div class="gal-item fi" data-caption="Vista del salón · Marian &amp; Biel">
-            <img src="/images/gallery/g18.jpg" alt="Vista del salón · Marian &amp; Biel" loading="lazy">
-            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        <div class="car-footer">
+            <div class="car-progress"><div class="car-progress-bar" id="carPBar"></div></div>
+            <p class="car-counter" id="carCounter">1&ndash;4 / 58</p>
         </div>
     </div>
 </section>
@@ -880,7 +825,6 @@
     </div>
     <div class="lb-footer">
         <p class="lb-caption" id="lbCaption"></p>
-        <div class="lb-dots" id="lbDots"></div>
         <p class="lb-counter" id="lbCounter"></p>
     </div>
 </div>
@@ -1169,74 +1113,218 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.fi').forEach(el => io.observe(el));
 
-    // Gallery lightbox
-    const galItems = [...document.querySelectorAll('.gal-item')];
-    const galData  = galItems.map(el => ({
-        src:     el.querySelector('img').src,
-        caption: el.dataset.caption || el.querySelector('img').alt
-    }));
+    // ── CAROUSEL + LIGHTBOX ───────────────────────────────────────
+    const GD = [
+        {s:'/images/gallery/g01.jpg', c:'Boda Marian & Biel · Detalle floral'},
+        {s:'/images/gallery/g02.jpg', c:'Boda Marian & Biel · Preparación del salón'},
+        {s:'/images/gallery/g03.jpg', c:'Boda Marian & Biel · Pasillo de ceremonia'},
+        {s:'/images/gallery/g04.jpg', c:'Boda Marian & Biel · Árbol decorativo'},
+        {s:'/images/gallery/g05.jpg', c:'Boda Marian & Biel · Decoración temática'},
+        {s:'/images/gallery/g06.jpg', c:'Boda Marian & Biel · Mesa de buffet'},
+        {s:'/images/gallery/g07.jpg', c:'Boda Marian & Biel · Arreglos florales'},
+        {s:'/images/gallery/g08.jpg', c:'Boda Marian & Biel · Mesa personalizada'},
+        {s:'/images/gallery/g09.jpg', c:'Boda Marian & Biel · Mesa "La Antigua"'},
+        {s:'/images/gallery/g10.jpg', c:'Boda Marian & Biel · Vista del salón'},
+        {s:'/images/gallery/g11.jpg', c:'Boda Marian & Biel · Mesa de recuerdos'},
+        {s:'/images/gallery/g12.jpg', c:'Boda Marian & Biel · Centro de mesa'},
+        {s:'/images/gallery/g13.jpg', c:'Boda Marian & Biel · Mesa de recuerdos · Bahía'},
+        {s:'/images/gallery/g14.jpg', c:'Boda Marian & Biel · Salón completo'},
+        {s:'/images/gallery/g15.jpg', c:'Boda Marian & Biel · Seating chart'},
+        {s:'/images/gallery/g16.jpg', c:'Boda Marian & Biel · Bienvenida'},
+        {s:'/images/gallery/g17.jpg', c:'Boda Marian & Biel · Árbol con cintas'},
+        {s:'/images/gallery/g18.jpg', c:'Boda Marian & Biel · Árbol decorativo · Vista amplia'},
+        {s:'/images/gallery/g19.jpg', c:'Boda Marian & Biel · Arco floral'},
+        {s:'/images/gallery/g20.jpg', c:'Boda Marian & Biel · Mesa de recuerdos'},
+        {s:'/images/gallery/g21.jpg', c:'Boda Marian & Biel · Arco floral · Vista lateral'},
+        {s:'/images/gallery/g22.jpg', c:'Boda Marian & Biel · Mesa de recuerdos · Bahía de Panamá'},
+        {s:'/images/gallery/g23.jpg', c:'Boda Marian & Biel · Arco floral y cupcakes'},
+        {s:'/images/gallery/g24.jpg', c:'Boda Marian & Biel · Buffet'},
+        {s:'/images/gallery/g25.jpg', c:'Boda Marian & Biel · Vista al atardecer'},
+        {s:'/images/gallery/g26.jpg', c:'Boda de Lujo · Detalle del bar'},
+        {s:'/images/gallery/g27.jpg', c:'Boda de Lujo · Mesa de charcutería'},
+        {s:'/images/gallery/g28.jpg', c:'Boda de Lujo · Charcutería · Detalle'},
+        {s:'/images/gallery/g29.jpg', c:'Boda de Lujo · Tabla de quesos'},
+        {s:'/images/gallery/g30.jpg', c:'Boda de Lujo · Tabla de quesos y flores'},
+        {s:'/images/gallery/g31.jpg', c:'Boda de Lujo · Frutos secos y embutidos'},
+        {s:'/images/gallery/g32.jpg', c:'Boda de Lujo · Tabla de quesos · Detalle'},
+        {s:'/images/gallery/g33.jpg', c:'Boda de Lujo · Presentación de quesos'},
+        {s:'/images/gallery/g34.jpg', c:'Boda de Lujo · "De aquí a la luna, te acompaño"'},
+        {s:'/images/gallery/g35.jpg', c:'Marisol Olmos con los novios'},
+        {s:'/images/gallery/g36.jpg', c:'Boda de Lujo · Mesa con orquídeas'},
+        {s:'/images/gallery/g37.jpg', c:'Boda de Lujo · Salón elegante'},
+        {s:'/images/gallery/g38.jpg', c:'Boda de Lujo · Mesa principal'},
+        {s:'/images/gallery/g39.jpg', c:'Boda de Lujo · Servicio de catering'},
+        {s:'/images/gallery/g40.jpg', c:'Boda de Lujo · Mesa de recuerdos y velas'},
+        {s:'/images/gallery/g41.jpg', c:'Boda de Lujo · Mesa redonda con orquídeas'},
+        {s:'/images/gallery/g42.jpg', c:'Boda de Lujo · Mesa de postres'},
+        {s:'/images/gallery/g43.jpg', c:'Boda de Lujo · Mesa de postres · Vista amplia'},
+        {s:'/images/gallery/g44.jpg', c:'Boda de Lujo · Pernil y aperitivos'},
+        {s:'/images/gallery/g45.jpg', c:'Boda de Lujo · Ceviche sobre hielo'},
+        {s:'/images/gallery/g46.jpg', c:'Boda de Lujo · Estación de mariscos'},
+        {s:'/images/gallery/g47.jpg', c:'Boda de Lujo · Mesa con orquídeas y postres'},
+        {s:'/images/gallery/g48.jpg', c:'Boda de Lujo · Mesa de charcutería completa'},
+        {s:'/images/gallery/g49.jpg', c:'Boda de Lujo · Torta de bodas'},
+        {s:'/images/gallery/g50.jpg', c:'Boda de Lujo · Mini tortas personalizadas'},
+        {s:'/images/gallery/g51.jpg', c:'Boda de Lujo · Vista panorámica del salón'},
+        {s:'/images/gallery/g52.jpg', c:'Boda de Lujo · Estación de mariscos y ceviches'},
+        {s:'/images/gallery/g53.jpg', c:'Boda de Lujo · Ensalada y ceviches'},
+        {s:'/images/gallery/g54.jpg', c:'Boda de Lujo · Pernil al horno'},
+        {s:'/images/gallery/g55.jpg', c:'Boda de Lujo · Torta con muro de follaje'},
+        {s:'/images/gallery/g56.jpg', c:'Boda de Lujo · Detalle de mesa'},
+        {s:'/images/gallery/g57.jpg', c:'Boda de Lujo · Mesa de dulces'},
+        {s:'/images/gallery/g58.jpg', c:'Boda de Lujo · Dulces y postres'}
+    ];
+
+    const carTrack   = document.getElementById('carTrack');
+    const carOuter   = document.getElementById('carOuter');
+    const carPrevBtn = document.getElementById('carPrev');
+    const carNextBtn = document.getElementById('carNext');
+    const carCounter = document.getElementById('carCounter');
+    const carPBar    = document.getElementById('carPBar');
+    let carPos = 0;
+    let autoTimer = null;
+    let _iw = 0;
+    const GAP = 8;
+
+    const iconSVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg>';
+
+    GD.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'car-item';
+        el.innerHTML = `<img src="${item.s}" alt="${item.c}" loading="${i < 8 ? 'eager' : 'lazy'}">
+            <div class="car-ov"><div class="car-ov-icon">${iconSVG}<span>Ver</span></div></div>`;
+        el.addEventListener('click', () => openLb(i));
+        carTrack.appendChild(el);
+    });
+
+    function getVis() {
+        const w = window.innerWidth;
+        if (w <= 480) return 1;
+        if (w <= 768) return 2;
+        if (w <= 1024) return 3;
+        return 4;
+    }
+
+    function calcItemW() {
+        const vis = getVis();
+        const ow = carOuter.offsetWidth;
+        if (vis === 1) return ow * 0.83;
+        return (ow - GAP * (vis - 1)) / vis;
+    }
+
+    function updateCarUI() {
+        const vis = getVis();
+        const total = GD.length;
+        const max = total - vis;
+        carPrevBtn.disabled = carPos === 0;
+        carNextBtn.disabled = carPos >= max;
+        carCounter.textContent = vis === 1
+            ? (carPos + 1) + ' / ' + total
+            : (carPos + 1) + '–' + Math.min(carPos + vis, total) + ' / ' + total;
+        carPBar.style.width = (max > 0 ? (carPos / max) * 100 : 100) + '%';
+    }
+
+    function applyPos(animated) {
+        if (!animated) carTrack.style.transition = 'none';
+        carTrack.style.transform = `translateX(-${carPos * (_iw + GAP)}px)`;
+        if (!animated) requestAnimationFrame(() => { carTrack.style.transition = ''; });
+    }
+
+    function refreshLayout(animated) {
+        _iw = calcItemW();
+        document.querySelectorAll('.car-item').forEach(el => { el.style.width = _iw + 'px'; });
+        applyPos(animated);
+        updateCarUI();
+    }
+
+    function moveTo(pos, animated) {
+        const vis = getVis();
+        carPos = Math.max(0, Math.min(pos, GD.length - vis));
+        applyPos(animated);
+        updateCarUI();
+    }
+
+    function stepCar(dir) { moveTo(carPos + dir, true); }
+
+    function startAuto() {
+        stopAuto();
+        autoTimer = setInterval(() => {
+            const vis = getVis();
+            if (carPos >= GD.length - vis) moveTo(0, true);
+            else stepCar(1);
+        }, 3800);
+    }
+    function stopAuto() { clearInterval(autoTimer); }
+
+    carPrevBtn.addEventListener('click', () => { stepCar(-1); stopAuto(); setTimeout(startAuto, 5000); });
+    carNextBtn.addEventListener('click', () => { stepCar(1);  stopAuto(); setTimeout(startAuto, 5000); });
+    carOuter.addEventListener('mouseenter', stopAuto);
+    carOuter.addEventListener('mouseleave', startAuto);
+
+    let cTx = 0, cTpos = 0, cDrag = false;
+    carOuter.addEventListener('touchstart', e => {
+        cTx = e.touches[0].clientX; cTpos = carPos; cDrag = true;
+        stopAuto(); carTrack.style.transition = 'none';
+    }, { passive: true });
+    carOuter.addEventListener('touchmove', e => {
+        if (!cDrag) return;
+        const dx = e.touches[0].clientX - cTx;
+        carTrack.style.transform = `translateX(${-(cTpos * (_iw + GAP)) + dx}px)`;
+    }, { passive: true });
+    carOuter.addEventListener('touchend', e => {
+        if (!cDrag) return;
+        cDrag = false; carTrack.style.transition = '';
+        const dx = e.changedTouches[0].clientX - cTx;
+        const vis = getVis();
+        if (Math.abs(dx) > 50) carPos = Math.max(0, Math.min(cTpos + (dx < 0 ? 1 : -1), GD.length - vis));
+        else carPos = cTpos;
+        applyPos(true); updateCarUI();
+        setTimeout(startAuto, 4000);
+    }, { passive: true });
+
+    window.addEventListener('resize', () => { refreshLayout(false); });
+
+    // ── LIGHTBOX ──────────────────────────────────────────────────
     const lb        = document.getElementById('lb');
     const lbImg     = document.getElementById('lbImg');
     const lbCaption = document.getElementById('lbCaption');
     const lbCounter = document.getElementById('lbCounter');
-    const lbDots    = document.getElementById('lbDots');
     let current = 0;
 
-    galData.forEach((_, i) => {
-        const d = document.createElement('div');
-        d.className = 'lb-dot';
-        d.addEventListener('click', () => goTo(i));
-        lbDots.appendChild(d);
-    });
-
-    function updateDots() {
-        document.querySelectorAll('.lb-dot').forEach((d,i) => d.classList.toggle('active', i === current));
-        lbCounter.textContent = (current + 1) + ' / ' + galData.length;
+    function updateLbUI() {
+        lbCounter.textContent = (current + 1) + ' / ' + GD.length;
     }
 
     function goTo(idx) {
-        current = (idx + galData.length) % galData.length;
-        lbImg.style.opacity = '0';
-        lbImg.style.transform = 'scale(.92)';
-        lbCaption.textContent = galData[current].caption;
-        updateDots();
-        const newSrc = galData[current].src;
+        current = (idx + GD.length) % GD.length;
+        lbImg.style.opacity = '0'; lbImg.style.transform = 'scale(.92)';
+        lbCaption.textContent = GD[current].c;
+        updateLbUI();
+        const src = GD[current].s;
         const tmp = new Image();
-        tmp.onload = () => {
-            lbImg.src = newSrc;
-            requestAnimationFrame(() => {
-                lbImg.style.opacity = '1';
-                lbImg.style.transform = 'scale(1)';
-            });
-        };
-        tmp.src = newSrc;
+        tmp.onload = () => { lbImg.src = src; requestAnimationFrame(() => { lbImg.style.opacity='1'; lbImg.style.transform='scale(1)'; }); };
+        tmp.src = src;
     }
 
     function openLb(idx) {
-        current = idx;
-        lbImg.src = galData[current].src;
-        lbCaption.textContent = galData[current].caption;
-        updateDots();
-        lb.classList.add('open');
+        stopAuto(); current = idx;
+        lbImg.src = GD[current].s;
+        lbCaption.textContent = GD[current].c;
+        updateLbUI(); lb.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
 
-    function closeLb() {
-        lb.classList.remove('open');
-        document.body.style.overflow = '';
-    }
+    function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; startAuto(); }
 
-    galItems.forEach((el, i) => el.addEventListener('click', () => openLb(i)));
     document.getElementById('lbClose').addEventListener('click', closeLb);
     document.getElementById('lbPrev').addEventListener('click', () => goTo(current - 1));
     document.getElementById('lbNext').addEventListener('click', () => goTo(current + 1));
     lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
-
     document.addEventListener('keydown', e => {
         if (!lb.classList.contains('open')) return;
-        if (e.key === 'Escape')      closeLb();
-        if (e.key === 'ArrowLeft')   goTo(current - 1);
-        if (e.key === 'ArrowRight')  goTo(current + 1);
+        if (e.key === 'Escape') closeLb();
+        if (e.key === 'ArrowLeft') goTo(current - 1);
+        if (e.key === 'ArrowRight') goTo(current + 1);
     });
 
     let touchX = 0;
@@ -1245,6 +1333,9 @@
         const dx = e.changedTouches[0].clientX - touchX;
         if (Math.abs(dx) > 45) goTo(current + (dx < 0 ? 1 : -1));
     }, { passive: true });
+
+    // Init carousel
+    requestAnimationFrame(() => { refreshLayout(false); startAuto(); });
 
     // Form submit
     function submitForm(e) {

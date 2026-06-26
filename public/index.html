@@ -74,14 +74,22 @@
             display: none; flex-direction: column; gap: 5px;
             cursor: pointer; background: none; border: none; padding: 5px;
         }
-        .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: all .3s; }
+        .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: all .3s ease; }
+        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         .mob-menu {
             display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
             background: #fff; border-bottom: 1px solid var(--border);
             z-index: 999; padding: 1.5rem 6%; flex-direction: column; gap: .75rem;
+            animation: mob-drop .25s ease both;
         }
         .mob-menu.open { display: flex; }
+        @keyframes mob-drop {
+            from { opacity:0; transform:translateY(-8px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
         .mob-menu a {
             text-decoration: none; color: var(--text);
             font-size: .85rem; font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
@@ -429,6 +437,8 @@
         .lb-counter { color: rgba(255,255,255,.3); font-size: .7rem; letter-spacing: .1em; }
 
         /* ── RESPONSIVE ── */
+
+        /* — Tablet ancho (1024px) — */
         @media(max-width:1024px){
             .grid3,.cat-grid,.port-grid,.test-grid,.blog-grid { grid-template-columns: repeat(2,1fr); }
             .gal-grid { grid-template-columns: repeat(3,1fr); }
@@ -436,22 +446,127 @@
             .about-wrap { grid-template-columns: 1fr; gap: 3rem; }
             .about-img { order: -1; }
             .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+            /* Nav: achicar gap para que quepan 8 items */
+            .nav-links { gap: 1.1rem; }
+            .nav-links a { font-size: .74rem; }
         }
+
+        /* — Móvil (768px) — */
         @media(max-width:768px){
-            :root{ --nav-h: 68px; }
-            .nav-links { display: none; }
-            .hamburger { display: flex; }
-            section { padding: 3.5rem 5%; }
+            :root{ --nav-h: 64px; }
+
+            /* Nav */
+            .nav-links  { display: none; }
+            .hamburger  { display: flex; }
+            .mob-menu a { font-size: .9rem; padding: .7rem 0; }
+
+            /* Secciones */
+            section { padding: 3rem 5%; }
+
+            /* Hero */
+            .hero-body { padding: 0 1.2rem; }
+            .hero-btns { flex-direction: column; align-items: center; gap: .75rem; }
+            .hero-btns .btn { width: 100%; max-width: 280px; text-align: center; }
+            .scroll-hint { display: none; }
+
+            /* About */
+            .about-img img    { height: 320px; }
+            .about-badge      { left: 0; bottom: 1rem; }
+            .about-name       { right: 0; bottom: 4.5rem; }
+            .about-accent     { display: none; }
+
+            /* Grids → 1 col */
             .grid3,.cat-grid,.port-grid,.test-grid,.blog-grid { grid-template-columns: 1fr; }
-            .gal-grid { grid-template-columns: repeat(2,1fr); gap: .4rem; }
-            .lb-prev { left: .5rem; font-size: 2.5rem; }
-            .lb-next { right: .5rem; font-size: 2.5rem; }
-            .form-row { grid-template-columns: 1fr; }
+
+            /* Categorías */
+            .cat-card { height: 260px; }
+
+            /* Portafolio */
+            .port-item img { height: 220px; }
+
+            /* Servicios */
+            .srv-card { padding: 1.8rem; }
+
+            /* Testimonios */
+            .test-card { padding: 1.8rem; }
+
+            /* Blog */
+            .blog-card img { height: 200px; }
+            .blog-body { padding: 1.2rem; }
+
+            /* Galería */
+            .gal-grid { grid-template-columns: repeat(2,1fr); gap: .35rem; }
+
+            /* Lightbox */
+            #lbImg       { max-width: 96vw; max-height: 70vh; }
+            .lb-prev     { left: .3rem; font-size: 2.4rem; }
+            .lb-next     { right: .3rem; font-size: 2.4rem; }
+            .lb-close    { top: .8rem; right: 1rem; font-size: 1.6rem; }
+            .lb-caption  { font-size: .65rem; text-align: center; padding: 0 3rem; }
+            .lb-dots     { gap: .35rem; }
+            .lb-dot      { width: 6px; height: 6px; }
+
+            /* Contacto */
+            .form-row    { grid-template-columns: 1fr; }
+            .c-form      { padding: 1.8rem 1.4rem; }
+            .c-info > p  { font-size: .88rem; }
+
+            /* Footer */
             .ft-top { grid-template-columns: 1fr; gap: 2rem; }
             .ft-bot { flex-direction: column; text-align: center; }
-            .cat-card { height: 300px; }
-            .about-badge { left: 0; bottom: 1rem; }
-            .about-img img { height: 360px; }
+            footer  { padding: 3rem 5% 1.5rem; }
+        }
+
+        /* — Teléfonos pequeños (480px) — */
+        @media(max-width:480px){
+            :root{ --nav-h: 60px; }
+
+            /* Logo más compacto */
+            .logo-main { font-size: 1.15rem; }
+            .logo-sub  { font-size: .55rem; }
+
+            /* Hero */
+            .hero-body h1 { font-size: clamp(1.9rem,8vw,2.6rem); }
+            .hero-sub     { font-size: .9rem; }
+            .eyebrow      { font-size: .6rem; letter-spacing: .22em; }
+
+            /* Secciones */
+            section   { padding: 2.5rem 4.5%; }
+            .h2       { font-size: clamp(1.6rem,6vw,2.2rem); }
+
+            /* About */
+            .about-img img  { height: 280px; }
+            .about-badge    { padding: 1rem 1.4rem; }
+            .about-badge strong { font-size: 1.8rem; }
+            .about-name     { padding: .7rem 1rem; }
+            .about-name strong { font-size: .88rem; }
+
+            /* Galería: 1 columna en móviles muy pequeños */
+            .gal-grid { grid-template-columns: 1fr; }
+            .gal-item.wide { aspect-ratio: 4/3; }
+
+            /* Botones */
+            .btn { padding: .8rem 1.8rem; font-size: .72rem; }
+
+            /* Servicios */
+            .srv-card { padding: 1.5rem; }
+            .srv-card h3 { font-size: 1.1rem; }
+
+            /* Categorías */
+            .cat-card { height: 220px; }
+            .cat-ov h3 { font-size: 1.5rem; }
+
+            /* Testimonios */
+            .test-card { padding: 1.4rem; }
+            .test-card::before { font-size: 3.8rem; top: -.3rem; left: .8rem; }
+
+            /* Contacto */
+            .c-form { padding: 1.4rem 1rem; }
+            .fg input, .fg textarea, .fg select { padding: .75rem .85rem; }
+
+            /* Footer */
+            .ft-col ul { gap: .4rem; }
+            .ft-bot p  { font-size: .72rem; }
         }
     </style>
 </head>
@@ -1019,8 +1134,14 @@
     // Mobile menu
     const ham = document.getElementById('ham');
     const mob = document.getElementById('mob');
-    ham.addEventListener('click', () => mob.classList.toggle('open'));
-    function closeMob() { mob.classList.remove('open'); }
+    ham.addEventListener('click', () => {
+        mob.classList.toggle('open');
+        ham.classList.toggle('active');
+    });
+    function closeMob() {
+        mob.classList.remove('open');
+        ham.classList.remove('active');
+    }
 
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(a => {

@@ -353,9 +353,85 @@
             to   { opacity:1; transform:translateY(0); }
         }
 
+        /* ── GALLERY ── */
+        .gal-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: .6rem;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .gal-item {
+            position: relative; overflow: hidden; cursor: pointer;
+            aspect-ratio: 1; background: var(--border);
+        }
+        .gal-item.wide { grid-column: span 2; aspect-ratio: 2/1; }
+        .gal-item img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            transition: transform .55s ease;
+        }
+        .gal-item:hover img { transform: scale(1.08); }
+        .gal-ov {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,0);
+            display: flex; align-items: center; justify-content: center;
+            transition: background .3s;
+        }
+        .gal-item:hover .gal-ov { background: rgba(0,0,0,.38); }
+        .gal-ov-icon {
+            opacity: 0; transform: scale(.6);
+            transition: opacity .3s, transform .3s;
+            color: #fff; display: flex; flex-direction: column; align-items: center; gap: .4rem;
+        }
+        .gal-item:hover .gal-ov-icon { opacity: 1; transform: scale(1); }
+        .gal-ov-icon span { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
+
+        /* ── LIGHTBOX ── */
+        .lb-wrap {
+            position: fixed; inset: 0; z-index: 9000;
+            background: rgba(10,10,10,.95);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity .3s;
+        }
+        .lb-wrap.open { opacity: 1; pointer-events: all; }
+        .lb-img-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+        #lbImg {
+            max-width: 88vw; max-height: 82vh;
+            object-fit: contain; display: block;
+            transform: scale(.92); opacity: 0;
+            transition: transform .35s cubic-bezier(.22,1,.36,1), opacity .35s;
+            box-shadow: 0 30px 80px rgba(0,0,0,.6);
+        }
+        .lb-wrap.open #lbImg { transform: scale(1); opacity: 1; }
+        .lb-btn {
+            position: absolute; background: none; border: none; cursor: pointer;
+            color: rgba(255,255,255,.6); transition: color .2s, transform .2s;
+            line-height: 1; padding: .5rem;
+        }
+        .lb-btn:hover { color: var(--accent); transform: scale(1.15); }
+        .lb-close { top: 1.4rem; right: 1.8rem; font-size: 2rem; position: fixed; }
+        .lb-prev  { left: 1.5rem; font-size: 3.5rem; top: 50%; transform: translateY(-50%); }
+        .lb-next  { right: 1.5rem; font-size: 3.5rem; top: 50%; transform: translateY(-50%); }
+        .lb-prev:hover { transform: translateY(-50%) scale(1.15); }
+        .lb-next:hover { transform: translateY(-50%) scale(1.15); }
+        .lb-footer {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            padding: 1rem 2rem; display: flex; flex-direction: column; align-items: center; gap: .5rem;
+        }
+        .lb-caption { color: rgba(255,255,255,.55); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; }
+        .lb-dots { display: flex; gap: .45rem; }
+        .lb-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: rgba(255,255,255,.25); cursor: pointer;
+            transition: background .25s, transform .25s;
+        }
+        .lb-dot.active { background: var(--accent); transform: scale(1.3); }
+        .lb-counter { color: rgba(255,255,255,.3); font-size: .7rem; letter-spacing: .1em; }
+
         /* ── RESPONSIVE ── */
         @media(max-width:1024px){
             .grid3,.cat-grid,.port-grid,.test-grid,.blog-grid { grid-template-columns: repeat(2,1fr); }
+            .gal-grid { grid-template-columns: repeat(3,1fr); }
             .ft-top { grid-template-columns: 1fr 1fr; }
             .about-wrap { grid-template-columns: 1fr; gap: 3rem; }
             .about-img { order: -1; }
@@ -367,6 +443,9 @@
             .hamburger { display: flex; }
             section { padding: 3.5rem 5%; }
             .grid3,.cat-grid,.port-grid,.test-grid,.blog-grid { grid-template-columns: 1fr; }
+            .gal-grid { grid-template-columns: repeat(2,1fr); gap: .4rem; }
+            .lb-prev { left: .5rem; font-size: 2.5rem; }
+            .lb-next { right: .5rem; font-size: 2.5rem; }
             .form-row { grid-template-columns: 1fr; }
             .ft-top { grid-template-columns: 1fr; gap: 2rem; }
             .ft-bot { flex-direction: column; text-align: center; }
@@ -388,6 +467,7 @@
         <li><a href="#inicio">Inicio</a></li>
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#portafolio">Portafolio</a></li>
+        <li><a href="#galeria">Galería</a></li>
         <li><a href="#testimonios">Testimonios</a></li>
         <li><a href="#blog">Blog</a></li>
         <li><a href="#sobre">Sobre</a></li>
@@ -402,6 +482,7 @@
     <a href="#inicio"      onclick="closeMob()">Inicio</a>
     <a href="#servicios"   onclick="closeMob()">Servicios</a>
     <a href="#portafolio"  onclick="closeMob()">Portafolio</a>
+    <a href="#galeria"     onclick="closeMob()">Galería</a>
     <a href="#testimonios" onclick="closeMob()">Testimonios</a>
     <a href="#blog"        onclick="closeMob()">Blog</a>
     <a href="#sobre"       onclick="closeMob()">Sobre</a>
@@ -579,6 +660,109 @@
         <a href="#contacto" class="btn btn-gold">Ver más proyectos</a>
     </div>
 </section>
+
+<!-- GALERÍA -->
+<section id="galeria" style="padding:6rem 6%; background:var(--dark);">
+    <div class="sec-hd center" style="margin-bottom:3rem;">
+        <p class="lbl" style="color:var(--accent);">Nuestro Trabajo</p>
+        <h2 class="h2" style="color:#fff;">Galería de <em>Momentos</em></h2>
+        <span class="bar c"></span>
+        <p class="desc" style="color:rgba(255,255,255,.55);">Cada imagen cuenta una historia única de amor, celebración y atención al detalle.</p>
+    </div>
+    <div class="gal-grid" id="galGrid">
+        <div class="gal-item fi" data-caption="Boda Marian &amp; Biel · Panamá">
+            <img src="/images/gallery/g01.jpg" alt="Boda Marian &amp; Biel · Panamá" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Ceremonia · Pasillo floral">
+            <img src="/images/gallery/g02.jpg" alt="Ceremonia · Pasillo floral" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Marisol Olmos con los novios">
+            <img src="/images/gallery/g03.jpg" alt="Marisol Olmos con los novios" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Decoración de mesas con orquídeas">
+            <img src="/images/gallery/g04.jpg" alt="Decoración de mesas con orquídeas" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+
+        <div class="gal-item wide fi" data-caption="Salón elegante · Boda en Panamá">
+            <img src="/images/gallery/g05.jpg" alt="Salón elegante · Boda en Panamá" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Detalle de mesa · Decoración personalizada">
+            <img src="/images/gallery/g06.jpg" alt="Detalle de mesa · Decoración personalizada" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Diseño temático · Árbol decorativo">
+            <img src="/images/gallery/g07.jpg" alt="Diseño temático · Árbol decorativo" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+
+        <div class="gal-item fi" data-caption="Torta de bodas · Diseño exclusivo">
+            <img src="/images/gallery/g08.jpg" alt="Torta de bodas · Diseño exclusivo" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Mesa de charcutería con arco floral">
+            <img src="/images/gallery/g09.jpg" alt="Mesa de charcutería con arco floral" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Mesa principal con follaje y flores blancas">
+            <img src="/images/gallery/g10.jpg" alt="Mesa principal con follaje y flores blancas" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Detalles · Bienvenida personalizada">
+            <img src="/images/gallery/g11.jpg" alt="Detalles · Bienvenida personalizada" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+
+        <div class="gal-item wide fi" data-caption="Centro floral con orquídeas · Mesa boda">
+            <img src="/images/gallery/g12.jpg" alt="Centro floral con orquídeas · Mesa boda" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Arco floral · Mesa de postres">
+            <img src="/images/gallery/g13.jpg" alt="Arco floral · Mesa de postres" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Mesa de postres · Gypsophila y dulces">
+            <img src="/images/gallery/g14.jpg" alt="Mesa de postres · Gypsophila y dulces" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+
+        <div class="gal-item fi" data-caption="Catering · Buffet con arreglos florales">
+            <img src="/images/gallery/g15.jpg" alt="Catering · Buffet con arreglos florales" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Mesa de recuerdos · Vista a la bahía">
+            <img src="/images/gallery/g16.jpg" alt="Mesa de recuerdos · Vista a la bahía" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Torta con muro de follaje · Diseño floral">
+            <img src="/images/gallery/g17.jpg" alt="Torta con muro de follaje · Diseño floral" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+        <div class="gal-item fi" data-caption="Vista del salón · Marian &amp; Biel">
+            <img src="/images/gallery/g18.jpg" alt="Vista del salón · Marian &amp; Biel" loading="lazy">
+            <div class="gal-ov"><div class="gal-ov-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/></svg><span>Ver</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb-wrap" id="lb" role="dialog" aria-modal="true" aria-label="Galería">
+    <button class="lb-btn lb-close" id="lbClose" aria-label="Cerrar">&#x2715;</button>
+    <button class="lb-btn lb-prev"  id="lbPrev"  aria-label="Anterior">&#8249;</button>
+    <button class="lb-btn lb-next"  id="lbNext"  aria-label="Siguiente">&#8250;</button>
+    <div class="lb-img-wrap">
+        <img id="lbImg" src="" alt="">
+    </div>
+    <div class="lb-footer">
+        <p class="lb-caption" id="lbCaption"></p>
+        <div class="lb-dots" id="lbDots"></div>
+        <p class="lb-counter" id="lbCounter"></p>
+    </div>
+</div>
 
 <!-- TESTIMONIOS -->
 <section id="testimonios" style="padding:6rem 6%;">
@@ -857,6 +1041,83 @@
         entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.fi').forEach(el => io.observe(el));
+
+    // Gallery lightbox
+    const galItems = [...document.querySelectorAll('.gal-item')];
+    const galData  = galItems.map(el => ({
+        src:     el.querySelector('img').src,
+        caption: el.dataset.caption || el.querySelector('img').alt
+    }));
+    const lb        = document.getElementById('lb');
+    const lbImg     = document.getElementById('lbImg');
+    const lbCaption = document.getElementById('lbCaption');
+    const lbCounter = document.getElementById('lbCounter');
+    const lbDots    = document.getElementById('lbDots');
+    let current = 0;
+
+    galData.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'lb-dot';
+        d.addEventListener('click', () => goTo(i));
+        lbDots.appendChild(d);
+    });
+
+    function updateDots() {
+        document.querySelectorAll('.lb-dot').forEach((d,i) => d.classList.toggle('active', i === current));
+        lbCounter.textContent = (current + 1) + ' / ' + galData.length;
+    }
+
+    function goTo(idx) {
+        current = (idx + galData.length) % galData.length;
+        lbImg.style.opacity = '0';
+        lbImg.style.transform = 'scale(.92)';
+        lbCaption.textContent = galData[current].caption;
+        updateDots();
+        const newSrc = galData[current].src;
+        const tmp = new Image();
+        tmp.onload = () => {
+            lbImg.src = newSrc;
+            requestAnimationFrame(() => {
+                lbImg.style.opacity = '1';
+                lbImg.style.transform = 'scale(1)';
+            });
+        };
+        tmp.src = newSrc;
+    }
+
+    function openLb(idx) {
+        current = idx;
+        lbImg.src = galData[current].src;
+        lbCaption.textContent = galData[current].caption;
+        updateDots();
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLb() {
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    galItems.forEach((el, i) => el.addEventListener('click', () => openLb(i)));
+    document.getElementById('lbClose').addEventListener('click', closeLb);
+    document.getElementById('lbPrev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('lbNext').addEventListener('click', () => goTo(current + 1));
+    lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+
+    document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape')      closeLb();
+        if (e.key === 'ArrowLeft')   goTo(current - 1);
+        if (e.key === 'ArrowRight')  goTo(current + 1);
+    });
+
+    let touchX = 0;
+    lb.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend',   e => {
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 45) goTo(current + (dx < 0 ? 1 : -1));
+    }, { passive: true });
 
     // Form submit
     function submitForm(e) {

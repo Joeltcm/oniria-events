@@ -1232,7 +1232,11 @@
 
     function refreshLayout(animated) {
         _iw = calcItemW();
-        document.querySelectorAll('.car-item').forEach(el => { el.style.width = _iw + 'px'; });
+        if (_iw < 10) return;
+        document.querySelectorAll('.car-item').forEach(el => {
+            el.style.width  = _iw + 'px';
+            el.style.height = _iw + 'px'; // explicit height for iOS Safari (aspect-ratio not supported pre-iOS15)
+        });
         applyPos(animated);
         updateCarUI();
     }
@@ -1334,8 +1338,12 @@
         if (Math.abs(dx) > 45) goTo(current + (dx < 0 ? 1 : -1));
     }, { passive: true });
 
-    // Init carousel
-    requestAnimationFrame(() => { refreshLayout(false); startAuto(); });
+    // Init carousel — retry until layout is ready (needed for iOS Safari)
+    (function initCar() {
+        if (carOuter.offsetWidth < 10) { setTimeout(initCar, 30); return; }
+        refreshLayout(false);
+        startAuto();
+    })();
 
     // Form submit
     function submitForm(e) {
